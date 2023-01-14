@@ -147,6 +147,8 @@ class DOMHandler {
                     this.uguesses[i].value = k;
                     if (i != 4)
                         this.uguesses[i + 1].focus();
+                    if (i == 4)
+                        this.mb.focus();
                 }
                 ;
                 e.preventDefault();

@@ -162,6 +162,7 @@ class DOMHandler {
         else if (k.length == 1 && k >= 'a' && k <= 'z') {
           this.uguesses[i].value = k;
           if (i != 4) this.uguesses[i + 1].focus();
+          if (i == 4) this.mb.focus();
         };
         e.preventDefault();
       }); // add event listeners to text inputs
