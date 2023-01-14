@@ -11,7 +11,7 @@ class Solver {
 
   /**
    * @param {string} g - word guess
-   * @param {string} code - code corresponding to guess (0 = not in word, 1 = in word and in correct position, 2 = in word but not in correct position)
+   * @param {string} code - code corresponding to guess (0 = not in word, 1 = in word but not in correct position, 2 = in word and in correct position)
    * @returns {string} - the top 5 guesses in order of likelihood
    */
   newGuess(g: string, code: string): string {
@@ -58,10 +58,10 @@ class Solver {
     for (let i = 0; i < g.length; i++) {
       if (w.includes(g[i])) {
         if (w[i] == g[i]) { // letter in right position
-          code += "1";
+          code += "2";
         }
         else {
-          if (w.match(new RegExp(g[i], "g")).length >= g.substring(0, i + 1).match(new RegExp(g[i], "g")).length) code += "2"; // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
+          if (w.match(new RegExp(g[i], "g")).length >= g.substring(0, i + 1).match(new RegExp(g[i], "g")).length) code += "1"; // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
           else code += "0";
         }
       }
@@ -118,7 +118,7 @@ class DOMHandler {
         if (this.code[i] == 0) {
           this.ug[i].style.backgroundColor = "#3A3A3C"
         }
-        else if (this.code[i] == 1) {
+        else if (this.code[i] == 2) {
           this.ug[i].style.backgroundColor = "#538D4E"
         }
         else {
