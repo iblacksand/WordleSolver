@@ -44,7 +44,12 @@ class Solver {
     let sorted = this.wordlist.slice().sort((a, b) => (scores[this.wordlist.indexOf(b)] - scores[this.wordlist.indexOf(a)]));
 
     let lg = "Most Likely Guesses:<br>"+ sorted.slice(0, 5).join("<br>");
-    if(this.wordlist.length == 0) return "No guesses found.<br>Page will refresh in 5 seconds.";
+    if(this.wordlist.length == 0) return `<article class="message is-large is-danger">
+    <div class="message-body" style="font-family:font-family: 'Lustria'">
+      No guesses found!<br>
+      Page will reload in <strong>5 seconds</strong>.
+    </div>
+  </article>`;
     return lg;
   }
 
@@ -69,7 +74,7 @@ class Solver {
 }
 
 class DOMHandler {
-  uguesses: HTMLInputElement[];
+  ug: HTMLInputElement[];
   code: number[];
   s: Solver;
   mb: HTMLButtonElement;
@@ -84,13 +89,13 @@ class DOMHandler {
     this.mb = <HTMLButtonElement>document.getElementById("mb");
     this.instructions = <HTMLParagraphElement>document.getElementById("ins");
 
-    this.uguesses = [];
+    this.ug = [];
     for (let i = 0; i < 5; i++) {
-      this.uguesses.push(<HTMLInputElement>document.getElementById("char" + (i + 1))); // get text inputs
+      this.ug.push(<HTMLInputElement>document.getElementById("char" + (i + 1))); // get text inputs
     }
     this.setCharListeners();
 
-    this.uguesses.forEach(e => {
+    this.ug.forEach(e => {
       e.style.caretColor = "transparent";
     });
 
@@ -98,7 +103,7 @@ class DOMHandler {
   }
 
   public findCode(): void {
-    this.uguesses.forEach((e) => {
+    this.ug.forEach((e) => {
       e.readOnly = true;
       e.style.cursor = "pointer";
       e.style.color = "#D7DADC"
@@ -107,17 +112,17 @@ class DOMHandler {
     });
     this.ls = [];
     for (let i = 0; i < 5; i++) {
-      this.uguesses[i].onclick = (() => {
-        this.uguesses[i].selectionStart = this.uguesses[i].selectionEnd;
+      this.ug[i].onclick = (() => {
+        this.ug[i].selectionStart = this.ug[i].selectionEnd;
         this.code[i] = (this.code[i] + 1) % 3;
         if (this.code[i] == 0) {
-          this.uguesses[i].style.backgroundColor = "#3A3A3C"
+          this.ug[i].style.backgroundColor = "#3A3A3C"
         }
         else if (this.code[i] == 1) {
-          this.uguesses[i].style.backgroundColor = "#538D4E"
+          this.ug[i].style.backgroundColor = "#538D4E"
         }
         else {
-          this.uguesses[i].style.backgroundColor = "#B59F33"
+          this.ug[i].style.backgroundColor = "#B59F33"
         }
       });
     }
@@ -127,7 +132,7 @@ class DOMHandler {
 
   public getGuesses(): void {
     let g = "";
-    this.uguesses.forEach((e) => { g += e.value });
+    this.ug.forEach((e) => { g += e.value });
     let code = this.code.join("");
     let guesses = this.s.newGuess(g, code);
     document.getElementById("guesses").innerHTML = guesses;
@@ -136,7 +141,7 @@ class DOMHandler {
 
     this.mb.onclick = this.findCode.bind(this);
     for (let i = 0; i < 5; i++) {
-      let e = this.uguesses[i];
+      let e = this.ug[i];
       e.readOnly = false;
       e.style.cursor = "text";
       e.style.color = "#363636";
@@ -145,7 +150,7 @@ class DOMHandler {
       e.value = "";
       e.onclick= null;
     };
-    this.uguesses[0].focus();
+    this.ug[0].focus();
     this.code = [0, 0, 0, 0, 0];
 
     this.instructions.textContent = "Input your next guess."
@@ -153,15 +158,15 @@ class DOMHandler {
 
   private setCharListeners(): void {
     for (let i = 0; i < 5; i++) {
-      this.uguesses[i].addEventListener("keydown", (e) => {
+      this.ug[i].addEventListener("keydown", (e) => {
         let k = e.key.toLowerCase();
         if (k == "backspace") {
-          this.uguesses[i].value = "";
-          if (i != 0) this.uguesses[i - 1].focus();
+          this.ug[i].value = "";
+          if (i != 0) this.ug[i - 1].focus();
         }
         else if (k.length == 1 && k >= 'a' && k <= 'z') {
-          this.uguesses[i].value = k;
-          if (i != 4) this.uguesses[i + 1].focus();
+          this.ug[i].value = k;
+          if (i != 4) this.ug[i + 1].focus();
           if (i == 4) this.mb.focus();
         };
         e.preventDefault();
