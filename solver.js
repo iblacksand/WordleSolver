@@ -23,21 +23,23 @@ class Solver {
         this.wordlist = newWordlist; // replace wordlist with new wordlist
         // Find most likely words
         let oc = new Map(); // map of letter to number of occurrences
+        const loc = new Array(5).fill(0).map(() => new Array(26).fill(0));
         this.wordlist.forEach(w => {
             for (let i = 0; i < w.length; i++) {
                 if (oc.has(w[i]))
                     oc.set(w[i], oc.get(w[i]) + 1);
+                loc[i][w.charCodeAt(i) - 97] += 1;
             }
         });
         let scores = [];
         this.wordlist.forEach(w => {
             let score = 0;
             for (let i = 0; i < w.length; i++) {
-                score += oc.get(w[i]);
+                score += loc[i][w.charCodeAt(i) - 97];
             }
             scores.push(score);
         });
-        let sorted = this.wordlist.slice().sort((a, b) => scores[this.wordlist.indexOf(a)] - scores[this.wordlist.indexOf(b)]);
+        let sorted = this.wordlist.slice().sort((a, b) => (scores[this.wordlist.indexOf(b)] - scores[this.wordlist.indexOf(a)]));
         let lg = "Most Likely Guesses:<br>" + sorted.slice(0, 5).join("<br>");
         if (this.wordlist.length == 0)
             return "No guesses found. Refresh page to try again.";
