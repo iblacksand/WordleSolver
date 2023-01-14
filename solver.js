@@ -94,6 +94,7 @@ class DOMHandler {
         this.ls = [];
         for (let i = 0; i < 5; i++) {
             this.uguesses[i].onclick = (() => {
+                this.uguesses[i].selectionStart = this.uguesses[i].selectionEnd;
                 this.code[i] = (this.code[i] + 1) % 3;
                 if (this.code[i] == 0) {
                     this.uguesses[i].style.backgroundColor = "#3A3A3C";
