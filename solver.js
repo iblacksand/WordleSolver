@@ -42,7 +42,7 @@ class Solver {
         let sorted = this.wordlist.slice().sort((a, b) => (scores[this.wordlist.indexOf(b)] - scores[this.wordlist.indexOf(a)]));
         let lg = "Most Likely Guesses:<br>" + sorted.slice(0, 5).join("<br>");
         if (this.wordlist.length == 0)
-            return "No guesses found. Refresh page to try again.";
+            return "No guesses found.<br>Page will refresh in 5 seconds.";
         return lg;
     }
     getCode(w, g) {
@@ -115,6 +115,8 @@ class DOMHandler {
         let code = this.code.join("");
         let guesses = this.s.newGuess(g, code);
         document.getElementById("guesses").innerHTML = guesses;
+        if (guesses.includes("guesses"))
+            setTimeout(() => { location.reload(); }, 5000);
         this.mb.onclick = this.findCode.bind(this);
         for (let i = 0; i < 5; i++) {
             let e = this.uguesses[i];
