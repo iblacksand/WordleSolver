@@ -148,7 +148,7 @@ class DOMHandler {
     this.uguesses[0].focus();
     this.code = [0, 0, 0, 0, 0];
 
-    this.instructions.textContent = "Input your guess."
+    this.instructions.textContent = "Input your next guess."
   }
 
   private setCharListeners(): void {
