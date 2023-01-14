@@ -2,7 +2,7 @@
 class Solver {
     constructor() {
         this.wordlist = [];
-        fetch('https://raw.githubusercontent.com/tabatkins/wordle-list/main/words') // update url to known repository.
+        fetch('https://raw.githubusercontent.com/iblacksand/WordleSolver/main/words.txt') // update url to known repository.
             .then(response => response.text())
             .then(text => this.wordlist = text.split('\n'))
             .then(() => { let dh = new DOMHandler(this); }); // fetch wordlist from github
