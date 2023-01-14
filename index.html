@@ -2,52 +2,74 @@
 <html>
 
 <head>
-  <title>Wordle Solver</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Lustria&display=swap" rel="stylesheet">
+    <title>Wordle Solver</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Lustria&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <section class="section">
-    <div class="container has-text-centered	">
-      <h1 class="title is-size-1" style="font-family: 'DM Serif Display';">
-        Wordle Solver
-      </h1>
-      <p class="subtitle" style="font-family: 'Lustria';">
-        Solve Wordle puzzles in seconds!
-      </p>
-    </div>
-  </section>
-  <section id="solverfield" class="section" style="display: none;">
+    <section class="section">
+        <div class="container has-text-centered	">
+            <h1 class="title is-size-1" style="font-family: 'DM Serif Display';">
+                Wordle Solver
+            </h1>
+            <p class="subtitle" style="font-family: 'Lustria';">
+                Solve Wordle puzzles in seconds!
+            </p>
+        </div>
+    </section>
+    <section id="solverfield" class="section" style="display: none;">
 
-    <p id="ins" class="subtitle has-text-centered" style="font-family: 'Lustria'; font-weight: 900;">
-        Input Guess
-      </p>
-    <div class="container has-text-centered	">
-      <div class="columns">
-        <div class="column">
-          <input id="char1" maxlength=1 class="input has-text-centered is-size-4" style="width: 5ch" type="text" placeholder="" tabindex="1"><input id="char2" maxlength=1 class="input has-text-centered is-size-4" style="width: 5ch" type="text" placeholder="" tabindex="2"><input id="char3" maxlength=1 class="input has-text-centered is-size-4" style="width: 5ch" type="text" placeholder="" tabindex="3"><input id="char4" maxlength=1 class="input has-text-centered is-size-4" style="width: 5ch" type="text" placeholder="" tabindex="4"><input id="char5" maxlength=1 class="input has-text-centered is-size-4" style="width: 5ch" type="text" placeholder="" tabindex="5">
-          
-          
+        <p id="ins" class="subtitle has-text-centered" style="font-family: 'Lustria'; font-weight: 900;">
+            Input Guess
+        </p>
+        <div class="container has-text-centered	">
+            <div class="columns">
+                <div class="column">
+                    <input id="char1" maxlength=1 class="input has-text-centered is-size-4" style="width: 5ch"
+                        type="text" placeholder="" tabindex="1"><input id="char2" maxlength=1
+                        class="input has-text-centered is-size-4" style="width: 5ch" type="text" placeholder=""
+                        tabindex="2"><input id="char3" maxlength=1 class="input has-text-centered is-size-4"
+                        style="width: 5ch" type="text" placeholder="" tabindex="3"><input id="char4" maxlength=1
+                        class="input has-text-centered is-size-4" style="width: 5ch" type="text" placeholder=""
+                        tabindex="4"><input id="char5" maxlength=1 class="input has-text-centered is-size-4"
+                        style="width: 5ch" type="text" placeholder="" tabindex="5">
+
+
+                </div>
+
+            </div>
+            <button type="submit" id="mb" class="button is-primary is-large" style="font-family: 'Lustria';">
+                Enter
+            </button>
         </div>
-        
-      </div>
-      <button type="submit" id="mb" class="button is-primary is-large" style="font-family: 'Lustria';">
-        Enter
-      </button>
-    </div>
-  </section>
-  <section class="section">
-    <div class="container has-text-centered	">
-      <div class="columns">
-        <div class="column">
-          <p id="guesses" class="content is-large" style="font-family: 'Lustria';"></p>
+    </section>
+    <section class="section">
+        <div class="container has-text-centered	">
+            <div class="columns">
+                <div class="column">
+                    <p id="guesses" class="content is-large" style="font-family: 'Lustria';"></p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  <script src="solver.js"></script>
+        <style>
+            .us {
+                -moz-user-select: -moz-none;
+                -khtml-user-select: none;
+                -webkit-user-select: none;
+
+                /*
+          Introduced in IE 10.
+          See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+        */
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <script src="solver.js"></script>
 </body>
+
 </html>

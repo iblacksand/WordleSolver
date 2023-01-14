@@ -37,7 +37,7 @@ class Solver {
     this.wordlist.forEach(w => {
       let score = 0;
       for (let i = 0; i < w.length; i++) {
-        score += loc[i][w.charCodeAt(i) - 97];
+        score += .25 * oc.get(w[i]) + .75 * loc[i][w.charCodeAt(i) - 97];
       }
       scores.push(score);
     });
@@ -103,6 +103,7 @@ class DOMHandler {
       e.style.cursor = "pointer";
       e.style.color = "#D7DADC"
       e.style.backgroundColor = "#3A3A3C"
+      e.classList.add("us");
     });
     this.ls = [];
     for (let i = 0; i < 5; i++) {
@@ -135,8 +136,9 @@ class DOMHandler {
       let e = this.uguesses[i];
       e.readOnly = false;
       e.style.cursor = "text";
-      e.style.color = "#363636"
-      e.style.backgroundColor = "white"
+      e.style.color = "#363636";
+      e.style.backgroundColor = "white";
+      e.classList.remove("us");
       e.value = "";
       e.onclick= null;
     };
