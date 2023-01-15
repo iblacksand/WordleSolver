@@ -43,8 +43,8 @@ class Solver {
     });
     let sorted = this.wordlist.slice().sort((a, b) => (scores[this.wordlist.indexOf(b)] - scores[this.wordlist.indexOf(a)]));
 
-    let lg = "Most Likely Guesses:<br>"+ sorted.slice(0, 5).join("<br>");
-    if(this.wordlist.length == 0) return `<article class="message is-large is-danger">
+    let lg = "Most Likely Guesses:<br>" + sorted.slice(0, 5).join("<br>") + "<br><br>Number of possible words: " + this.wordlist.length;
+    if (this.wordlist.length == 0) return `<article class="message is-large is-danger">
     <div class="message-body" style="font-family:font-family: 'Lustria'">
       No guesses found!<br>
       Page will reload in <strong>5 seconds</strong>.
@@ -80,10 +80,12 @@ class DOMHandler {
   mb: HTMLButtonElement;
   instructions: HTMLParagraphElement;
   ls: MouseEvent[];
+  locked: boolean;
 
   constructor(s: Solver) {
     document.getElementById("solverfield").style.display = 'block'
 
+    this.locked = false;
     this.code = [0, 0, 0, 0, 0]
     this.s = s;
     this.mb = <HTMLButtonElement>document.getElementById("mb");
@@ -100,6 +102,9 @@ class DOMHandler {
     });
 
     this.mb.onclick = this.findCode.bind(this);
+    this.mb.addEventListener("keydown", (e) => {
+      if (e.key == "Backspace") this.ug[4].focus();
+    })
   }
 
   public findCode(): void {
@@ -110,6 +115,7 @@ class DOMHandler {
       e.style.backgroundColor = "#3A3A3C"
       e.classList.add("us");
     });
+    this.locked = true;
     this.ls = [];
     for (let i = 0; i < 5; i++) {
       this.ug[i].onclick = (() => {
@@ -137,9 +143,10 @@ class DOMHandler {
     let guesses = this.s.newGuess(g, code);
     document.getElementById("guesses").innerHTML = guesses;
 
-    if(guesses.includes("guesses")) setTimeout(() => {location.reload()}, 5000);
+    if (guesses.includes("guesses")) setTimeout(() => { location.reload() }, 5000);
 
     this.mb.onclick = this.findCode.bind(this);
+    this.locked = false;
     for (let i = 0; i < 5; i++) {
       let e = this.ug[i];
       e.readOnly = false;
@@ -148,7 +155,7 @@ class DOMHandler {
       e.style.backgroundColor = "white";
       e.classList.remove("us");
       e.value = "";
-      e.onclick= null;
+      e.onclick = null;
     };
     this.ug[0].focus();
     this.code = [0, 0, 0, 0, 0];
@@ -159,6 +166,10 @@ class DOMHandler {
   private setCharListeners(): void {
     for (let i = 0; i < 5; i++) {
       this.ug[i].addEventListener("keydown", (e) => {
+        if (this.locked) {
+          e.preventDefault();
+          return
+        };
         let k = e.key.toLowerCase();
         if (k == "backspace") {
           this.ug[i].value = "";

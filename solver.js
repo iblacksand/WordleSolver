@@ -40,7 +40,7 @@ class Solver {
             scores.push(score);
         });
         let sorted = this.wordlist.slice().sort((a, b) => (scores[this.wordlist.indexOf(b)] - scores[this.wordlist.indexOf(a)]));
-        let lg = "Most Likely Guesses:<br>" + sorted.slice(0, 5).join("<br>");
+        let lg = "Most Likely Guesses:<br>" + sorted.slice(0, 5).join("<br>") + "<br><br>Number of possible words: " + this.wordlist.length;
         if (this.wordlist.length == 0)
             return `<article class="message is-large is-danger">
     <div class="message-body" style="font-family:font-family: 'Lustria'">
@@ -74,6 +74,7 @@ class Solver {
 class DOMHandler {
     constructor(s) {
         document.getElementById("solverfield").style.display = 'block';
+        this.locked = false;
         this.code = [0, 0, 0, 0, 0];
         this.s = s;
         this.mb = document.getElementById("mb");
@@ -87,6 +88,10 @@ class DOMHandler {
             e.style.caretColor = "transparent";
         });
         this.mb.onclick = this.findCode.bind(this);
+        this.mb.addEventListener("keydown", (e) => {
+            if (e.key == "Backspace")
+                this.ug[4].focus();
+        });
     }
     findCode() {
         this.ug.forEach((e) => {
@@ -96,6 +101,7 @@ class DOMHandler {
             e.style.backgroundColor = "#3A3A3C";
             e.classList.add("us");
         });
+        this.locked = true;
         this.ls = [];
         for (let i = 0; i < 5; i++) {
             this.ug[i].onclick = (() => {
@@ -124,6 +130,7 @@ class DOMHandler {
         if (guesses.includes("guesses"))
             setTimeout(() => { location.reload(); }, 5000);
         this.mb.onclick = this.findCode.bind(this);
+        this.locked = false;
         for (let i = 0; i < 5; i++) {
             let e = this.ug[i];
             e.readOnly = false;
@@ -142,6 +149,11 @@ class DOMHandler {
     setCharListeners() {
         for (let i = 0; i < 5; i++) {
             this.ug[i].addEventListener("keydown", (e) => {
+                if (this.locked) {
+                    e.preventDefault();
+                    return;
+                }
+                ;
                 let k = e.key.toLowerCase();
                 if (k == "backspace") {
                     this.ug[i].value = "";
