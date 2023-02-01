@@ -31,11 +31,18 @@ class Solver {
                 loc[i][w.charCodeAt(i) - 97] += 1;
             }
         });
+        for (let i = 0; i < loc.length; i++) {
+            const e = loc[i];
+            const m = Math.max.apply(null, e);
+            for (let j = 0; j < e.length; j++) {
+                e[j] = e[j] / m;
+            }
+        }
         let scores = [];
         this.wordlist.forEach(w => {
             let score = 0;
             for (let i = 0; i < w.length; i++) {
-                score += .25 * oc.get(w[i]) + .75 * loc[i][w.charCodeAt(i) - 97];
+                score += loc[i][w.charCodeAt(i) - 97];
             }
             scores.push(score);
         });
@@ -51,21 +58,29 @@ class Solver {
         return lg;
     }
     getCode(w, g) {
-        let code = "";
+        var _a, _b;
+        let code = "00000";
+        let correct = "";
         for (let i = 0; i < g.length; i++) {
+            if (w[i] == g[i]) { // letter in right position
+                code = code.replaceAt(i, "2");
+                correct += g[i];
+            }
+        }
+        for (let i = 0; i < g.length; i++) {
+            if (w[i] == g[i])
+                continue;
             if (w.includes(g[i])) {
-                if (w[i] == g[i]) { // letter in right position
-                    code += "2";
-                }
-                else {
-                    if (w.match(new RegExp(g[i], "g")).length >= g.substring(0, i + 1).match(new RegExp(g[i], "g")).length)
-                        code += "1"; // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
-                    else
-                        code += "0";
-                }
+                let in_word = w.match(new RegExp(g[i], "g")).length;
+                let in_guess = g.match(new RegExp(g[i], "g")).length;
+                let in_correct = (_b = (_a = correct.match(new RegExp(g[i], "g"))) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
+                if ((in_correct + in_guess) <= in_word)
+                    code = code.replaceAt(i, "1"); // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
+                else
+                    code = code.replaceAt(i, "0");
             }
             else {
-                code += "0";
+                code = code.replaceAt(i, "0");
             }
         }
         return code;
@@ -123,7 +138,7 @@ class DOMHandler {
     }
     getGuesses() {
         let g = "";
-        this.ug.forEach((e) => { g += e.value; });
+        this.ug.forEach((e) => { g += e.value.toLowerCase(); });
         let code = this.code.join("");
         let guesses = this.s.newGuess(g, code);
         document.getElementById("guesses").innerHTML = guesses;
@@ -161,7 +176,7 @@ class DOMHandler {
                         this.ug[i - 1].focus();
                 }
                 else if (k.length == 1 && k >= 'a' && k <= 'z') {
-                    this.ug[i].value = k;
+                    this.ug[i].value = k.toUpperCase();
                     if (i != 4)
                         this.ug[i + 1].focus();
                     if (i == 4)
@@ -173,4 +188,7 @@ class DOMHandler {
         }
     }
 }
+String.prototype.replaceAt = function (index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+};
 let s = new Solver();
