@@ -1,6 +1,3 @@
-interface String {
-  replaceAt(index: number, replacement: string): string;
-}
 class Solver {
   wordlist: string[]
 
@@ -66,11 +63,11 @@ class Solver {
   }
 
   public getCode(w: string, g: string): string {
-    let code = "00000";
+    let code = Array(5).fill("")
     let correct = ""
     for (let i = 0; i < g.length; i++) {
       if (w[i] == g[i]) { // letter in right position
-        code = code.replaceAt(i, "2")
+        code[i] = "2"
         correct += g[i];
       }
     }
@@ -80,14 +77,14 @@ class Solver {
         let in_word = w.match(new RegExp(g[i], "g")).length;
         let in_guess = g.match(new RegExp(g[i], "g")).length;
         let in_correct = correct.match(new RegExp(g[i], "g"))?.length ?? 0;
-        if ((in_correct + in_guess) <= in_word) code = code.replaceAt(i, "1"); // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
-        else code = code.replaceAt(i, "0");
+        if ((in_correct + in_guess) <= in_word) code[i] = "1"; // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
+        else code[i] = "0";
       }
       else {
-        code = code.replaceAt(i, "0");
+        code[i] = "0";
       }
     }
-    return code;
+    return code.join("");
   }
 }
 
@@ -204,8 +201,4 @@ class DOMHandler {
   }
 }
 
-String.prototype.replaceAt = function (index, replacement) {
-  return this.substring(0, index) + replacement + this.substring(index + replacement.length);
-}
 let s = new Solver();
-

@@ -59,11 +59,11 @@ class Solver {
     }
     getCode(w, g) {
         var _a, _b;
-        let code = "00000";
+        let code = Array(5).fill("");
         let correct = "";
         for (let i = 0; i < g.length; i++) {
             if (w[i] == g[i]) { // letter in right position
-                code = code.replaceAt(i, "2");
+                code[i] = "2";
                 correct += g[i];
             }
         }
@@ -75,15 +75,15 @@ class Solver {
                 let in_guess = g.match(new RegExp(g[i], "g")).length;
                 let in_correct = (_b = (_a = correct.match(new RegExp(g[i], "g"))) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
                 if ((in_correct + in_guess) <= in_word)
-                    code = code.replaceAt(i, "1"); // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
+                    code[i] = "1"; // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
                 else
-                    code = code.replaceAt(i, "0");
+                    code[i] = "0";
             }
             else {
-                code = code.replaceAt(i, "0");
+                code[i] = "0";
             }
         }
-        return code;
+        return code.join("");
     }
 }
 class DOMHandler {
@@ -188,7 +188,4 @@ class DOMHandler {
         }
     }
 }
-String.prototype.replaceAt = function (index, replacement) {
-    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
-};
 let s = new Solver();
