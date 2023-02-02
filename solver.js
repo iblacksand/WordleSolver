@@ -22,30 +22,7 @@ class Solver {
         }
         this.wordlist = newWordlist; // replace wordlist with new wordlist
         // Find most likely words
-        let oc = new Map(); // map of letter to number of occurrences
-        const loc = new Array(5).fill(0).map(() => new Array(26).fill(0));
-        this.wordlist.forEach(w => {
-            for (let i = 0; i < w.length; i++) {
-                if (oc.has(w[i]))
-                    oc.set(w[i], oc.get(w[i]) + 1);
-                loc[i][w.charCodeAt(i) - 97] += 1;
-            }
-        });
-        for (let i = 0; i < loc.length; i++) {
-            const e = loc[i];
-            const m = Math.max.apply(null, e);
-            for (let j = 0; j < e.length; j++) {
-                e[j] = e[j] / m;
-            }
-        }
-        let scores = [];
-        this.wordlist.forEach(w => {
-            let score = 0;
-            for (let i = 0; i < w.length; i++) {
-                score += loc[i][w.charCodeAt(i) - 97];
-            }
-            scores.push(score);
-        });
+        let scores = this.getScores(this.wordlist);
         let sorted = this.wordlist.slice().sort((a, b) => (scores[this.wordlist.indexOf(b)] - scores[this.wordlist.indexOf(a)]));
         let lg = "Most Likely Guesses:<br>" + sorted.slice(0, 5).join("<br>") + "<br><br>Number of possible words: " + this.wordlist.length;
         if (this.wordlist.length == 0)
@@ -56,6 +33,23 @@ class Solver {
     </div>
   </article>`;
         return lg;
+    }
+    getScores(wl) {
+        let graph = new Array(4).fill(0).map(() => new Array(26).fill(0).map(() => new Array(26).fill(0)));
+        let scores = [];
+        wl.forEach(w => {
+            for (let i = 0; i < w.length - 1; i++) {
+                graph[i][w.charCodeAt(i) - 97][w.charCodeAt(i + 1) - 97] += 1;
+            }
+        });
+        wl.forEach(w => {
+            let score = 0;
+            for (let i = 0; i < w.length - 1; i++) {
+                score += graph[i][w.charCodeAt(i) - 97][w.charCodeAt(i + 1) - 97];
+            }
+            scores.push(score);
+        });
+        return scores;
     }
     getCode(w, g) {
         var _a, _b;
