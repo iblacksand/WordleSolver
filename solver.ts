@@ -72,11 +72,7 @@ class Solver {
         correct.push(i);
         w.replace(g[i], "");
       }
-      // else{
-      //   new_w += w[i]
-      // }
     }
-    // w = new_w;
     for (let i = 0; i < g.length; i++) {
       if (correct.includes(i)) continue;
       if (w.includes(g[i])) {
