@@ -51,27 +51,32 @@ class Solver {
         });
         return scores;
     }
+    /**
+     * @param {string} w  - word to compare against guess
+     * @param {string} g - guess
+     * @returns {string} - code corresponding to guess (0 = not in word, 1 = in word but not in correct position, 2 = in word and in correct position)
+     */
     getCode(w, g) {
-        var _a, _b;
         let code = Array(5).fill("");
-        let correct = "";
+        let correct = [];
+        let new_w = "";
         for (let i = 0; i < g.length; i++) {
             if (w[i] == g[i]) { // letter in right position
                 code[i] = "2";
-                correct += g[i];
+                correct.push(i);
+                w.replace(g[i], "");
             }
+            // else{
+            //   new_w += w[i]
+            // }
         }
+        // w = new_w;
         for (let i = 0; i < g.length; i++) {
-            if (w[i] == g[i])
+            if (correct.includes(i))
                 continue;
             if (w.includes(g[i])) {
-                let in_word = w.match(new RegExp(g[i], "g")).length;
-                let in_guess = g.match(new RegExp(g[i], "g")).length;
-                let in_correct = (_b = (_a = correct.match(new RegExp(g[i], "g"))) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
-                if ((in_correct + in_guess) <= in_word)
-                    code[i] = "1"; // letter in wrong position but still in word. Checks to verify that there are not more letters in guess than word
-                else
-                    code[i] = "0";
+                w.replace(g[i], "");
+                code[i] = "1";
             }
             else {
                 code[i] = "0";
