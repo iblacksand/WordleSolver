@@ -65,18 +65,18 @@ class Solver {
   public getCode(w: string, g: string): string {
     let code = Array(5).fill("")
     let correct = []
-    let new_w  = "";
+    let o = 0
     for (let i = 0; i < g.length; i++) {
-      if (w[i] == g[i]) { // letter in right position
+      if (w[i - o] == g[i]) { // letter in right position
         code[i] = "2"
         correct.push(i);
-        w.replace(g[i], "");
+        o++;
       }
     }
     for (let i = 0; i < g.length; i++) {
       if (correct.includes(i)) continue;
       if (w.includes(g[i])) {
-        w.replace(g[i], "");
+        w = w.replace(g[i], "");
         code[i] = "1";
       }
       else {
